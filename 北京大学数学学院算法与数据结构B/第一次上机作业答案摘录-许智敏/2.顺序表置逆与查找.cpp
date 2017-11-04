@@ -41,35 +41,39 @@ Description: Record
 
 #include<stdio.h>
 #include<malloc.h>
+#define Max 2000 
 
 struct list
 {
 	int n;
 	int *element;
 };   
+typedef struct list * Plist; //结构体指针变量重命名 
      
 int main() 
 {
 	int i,j,m,*pre,*post,x,y;
+	Plist plist;
+	
 	scanf("%d",&m);
-	struct list *plist;
-	plist=(struct list*)malloc(sizeof(struct list));
-	plist->element=(int*)malloc(sizeof(int)*2000);
+	plist=(Plist)malloc(sizeof(struct list));
+	plist->element=(int*)malloc(sizeof(int)*Max);
 	pre=(int*)malloc(sizeof(int)*m); 
 	post=(int*)malloc(sizeof(int)*m); 
 	for(i=0;i<m;i++)
 	{
-		scanf("%d%d%d",&plist->n,&x,&y);
-	    for(j=plist->n-1;j>=0;j--)
+		scanf("%d %d %d",&plist->n,&x,&y);
+	    for(j=plist->n-1;j>=0;j--) // 可以在读入的时候直接置逆，或者查找的时候反向查找 
 	    {
-		  scanf("%d",&plist->element[j]); 
+		  	scanf("%d",&plist->element[j]); 
 		}
 		for(j=0;j<plist->n;j++)
 		{
-		   if(plist->element[j]>x&&plist->element[j]<y)
-		    {*(pre+i)=plist->element[j-1];
-		      *(post+i)=plist->element[j+1];
-		      break;
+		    if(plist->element[j]>x&&plist->element[j]<y)//查找满足要求得元素 
+		    {
+				*(pre+i)=plist->element[j-1];
+		      	*(post+i)=plist->element[j+1];
+		      	break;
 			}
 		}
 	}
@@ -78,10 +82,12 @@ int main()
 	{
 		printf("%d %d\n",*(pre+i),*(post+i));
 	}
-	
+	free(plist->element);
 	free(plist); 
 	free(pre);
 	free(post);
 	
 	return 0;
 }
+
+

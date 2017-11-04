@@ -27,17 +27,18 @@ Description: Record Example
 *******************************************/
 #include<stdio.h>
 #include<stdlib.h>
-#include<time.h>
+#include<time.h>//注意头文件的引用 
 
 int main()
 {
 	int n,a,b;
 	scanf("%d %d %d",&n,&a,&b);	
-	srand(time(0));
+	srand(time(0));//设置随机随机种子 
 	for(int i=0;i<n;i++)
 		printf("%d ",rand()%(b-a+1)+a);
 	printf("\n");
 	
 	return 0;
  } 
+
 

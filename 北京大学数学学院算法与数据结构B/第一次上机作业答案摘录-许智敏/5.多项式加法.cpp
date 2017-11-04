@@ -45,73 +45,126 @@ Description: Record
 
 #include<stdio.h>
 #include<stdlib.h>
+#define MAX 350 
 struct Node;
-typedef struct Node*PNode;
+typedef struct Node*PNode; //结构体指针重命名
 struct Node{
-	int a;
-	int c;
-	PNode link;
+	int num; //系数
+	int power; //幂次
 };
-typedef struct Node*Plist;
+struct List
+{
+	int max;              
+	int n;            
+	PNode element;
+};
+typedef struct List*Plist; //结构体指针重命名 
 
-Plist crea(void);
-int inse(Plist llist,PNode p,int x,int y);
-
+Plist crea(int b); //函数声明 
+void inse(Plist llist, Node p); //函数声明 
+int find(Plist llist, Node p); //函数声明
 int main(){
 	int s,i=0,j,t,k,l;
-	PNode p,q;
-	Plist llist;
-	
+	Node p,a,b;
+	Plist llist;	
 	scanf("%d",&k);
 	for(l=0;l<k;l++){
-	llist=crea();
-	p=llist;
-
-	while(scanf("%d %d",&s,&t)!=NULL&&t>=0){
-		p=llist;
-		if(i==0){
-			inse(llist,p,s,t);
+		Plist plist1 = crea(MAX);
+		Plist plist2 = crea(MAX);
+		Plist plist3 = crea(MAX);
+		while(scanf("%d %d", &p.num, &p.power) && p.power>=0) // 读入第一个多项式 
+		{
+			s = find(plist1, p);
+			if( s == plist1->n) 
+				plist1->element[plist1->n++]=p;
+			else
+				plist1->element[s].num+=p.num;
+		}	
+		while(scanf("%d %d", &p.num, &p.power) && p.power>=0) // 读入第二个多项式 
+		{
+			s = find(plist1, p);
+			if( s == plist1->n) 
+				plist1->element[plist1->n++]=p;
+			else
+				plist1->element[s].num+=p.num;
 		}
-		else {
-		while(p->link!=NULL&&t<p->link->c) p=p->link;
-        if(p->link!=NULL){
-		if(t!=p->link->c) inse(llist,p,s,t);
-		else p->link->a+=s;}
-		else inse(llist,p,s,t);
+		
+		for(s=1;s<plist1->n;s++) //排序 
+		{
+			for(j=0;j<plist1->n-s;j++)
+				if(plist1->element[j].power<plist1->element[j+1].power)
+				{
+					p=plist1->element[j];
+					plist1->element[j]=plist1->element[j+1];
+					plist1->element[j+1]=p;	
+				}
 		}
-		i++;
+		for(s=1;s<plist3->n;s++) //排序 
+		{
+			for(j=0;j<plist3->n-s;j++)
+				if(plist3->element[j].power<plist3->element[j+1].power)
+				{
+					p=plist3->element[j];
+					plist3->element[j]=plist3->element[j+1];
+					plist3->element[j+1]=p;	
+				}
+		}		
+		i=0; j=0;
+		while(i<plist1->n&&j<plist3->n) // 合并相同幂次项 
+		{
+			a = plist1->element[i];
+			b = plist3->element[j];
+			if(a.power==b.power) {
+				a.num += b.num;
+				if(a.num!=0) {inse(plist2, a);}
+				++i;++j;
+			}else{
+				if(a.power>b.power) {inse(plist2, a);++i;}
+				else {inse(plist2, b);++j;}
+			}
+		}
+		for(;i<plist1->n;i++) {inse(plist2, plist1->element[i]);}//归并未合并的项 
+		for(;j<plist3->n;j++) {inse(plist2, plist3->element[j]);}//归并未合并的项 
+		for(i=0;i<plist2->n;i++) //输出 
+			if(plist2->element[i].num!=0)
+				printf("[ %d %d ] ", plist2->element[i].num, plist2->element[i].power);	
+		printf("\n");
+		free(plist1); free(plist2); //释放申请的内存空间 
 	}
-	while(scanf("%d %d",&s,&t)!=NULL&&t>=0){
-		p=llist;
-		while(p->link!=NULL&&t<p->link->c)  p=p->link;
-		if(p->link!=NULL){
-		if(t!=p->link->c) inse(llist,p,s,t);
-		else p->link->a+=s;}
-		else 
-		inse(llist,p,s,t);
-		i++;
-	}
-
-	p=llist;
-	while(p->link!=NULL){
-		if(p->link->a!=0) printf("[ %d %d ] ",p->link->a,p->link->c);
-		p=p->link;
-	}printf("\n");}
 	return 0;
 }
 
-Plist crea(void)
+Plist crea(int b) // 创建顺序表 
 {
-	Plist llist=(Plist)malloc(sizeof(struct Node));
-	if(llist!=NULL) llist->link=NULL;
-	else printf("Out of space!\n");
-	return llist;
+	Plist palist;
+	palist = (Plist) malloc(sizeof(struct List));
+	if(palist!= NULL)
+	{
+		palist->element = (PNode) malloc(sizeof(Node)*b);
+		if(palist->element!=NULL)
+		{
+			palist->max = b;
+			palist->n = 0;
+			return(palist);
+		}
+		else
+			free(palist);
+	}
+	printf("Out of Space!\n");
+	return NULL; 
 }
 
-int inse(Plist llist,PNode p,int x,int y)
+void inse(Plist llist, Node p) //插入元素 
 {
-	PNode q=(PNode)malloc(sizeof(struct Node));
-	if(q==NULL) return 0;
-	q->a=x;q->c=y;q->link=p->link;p->link=q;
-	return 1;
+	llist->element[llist->n]=p;
+	llist->n+=1;
+	return ;
 }
+
+int find(Plist llist, Node p) {
+	int i=0;
+	for (i=0; i<llist->n; i++) {if(p.power==llist->element[i].power) break;}
+	return i;
+}
+
+

@@ -82,7 +82,7 @@ Description: Record
 #include<stdio.h>
 #include<malloc.h>
 
-struct student
+struct student //结构体 
 {
 	int num;
 	char name[5];
@@ -93,18 +93,18 @@ int main()
 {
 	int i,j,k;
 	struct student palist[13],pblist[14],pclist[26];
-	for(i=1;i<=12;i++)
+	for(i=1;i<=12;i++) //第一个成绩表 
     {
-    	scanf("%d%s%d",&palist[i].num,palist[i].name,&palist[i].grade);  
+    	scanf("%d %s %d",&palist[i].num,palist[i].name,&palist[i].grade);  
 	}
-	for(j=1;j<=13;j++)
+	for(j=1;j<=13;j++) // 第二个成绩表 
     {
-    	scanf("%d%s%d",&pblist[j].num,pblist[j].name,&pblist[j].grade);
+    	scanf("%d %s %d",&pblist[j].num,pblist[j].name,&pblist[j].grade);
 	}
 
 	
 	i=j=1;
-	for(k=1;k<=25;k++)
+	for(k=1;k<=25;k++) //归并 
    {
   		if(i<=12&&j<=13&&(palist[i].grade)>=(pblist[j].grade)||j>13)             
       	{
@@ -118,7 +118,7 @@ int main()
 	  	}
 	} 
 
-	for(k=1;k<=25;k++)
+	for(k=1;k<=25;k++) // 输出归并得结果 
    {
    		printf("%d %s %d\n",pclist[k].num,pclist[k].name,pclist[k].grade);
 	} 

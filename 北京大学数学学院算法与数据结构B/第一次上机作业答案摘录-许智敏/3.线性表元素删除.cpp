@@ -43,25 +43,32 @@ Description: Record
 
 #include <stdio.h>
 #include <stdlib.h>
+#define Max 2000 
 
-int main(int argc,char *argv[])
+int main()
 {
 	int c=0;
-	int *const a=(int *)malloc(sizeof(int)*2000),*p=NULL;
-	for(scanf("%d",&c);c;c--)
+	int *a=(int *)malloc(sizeof(int)*Max); //申请空间 
+	int *p=NULL;
+	scanf("%d",&c);
+	for(int i=0;i<c;i++) //读入c组数据 
 	{
 		int n=0,x=0;
-		scanf("%d%d",&n,&x);
-		for(p=a;n;n--)
+		scanf("%d %d",&n,&x);
+		for(p=a;n;n--) //依次读入每组数据 
 			scanf("%d",p++);
 		int *b=p,*q=a;
-		for(p=a;p!=b;p++)
+		for(p=a;p!=b;p++) //指针操作删除元素 
 			if(*p<=x)
 				*(q++)=*p;
 		b=q;
-		for(p=a;p!=b;p++)
+		for(p=a;p!=b;p++) //打印顺序表 
 			printf("%d ",*p);
-		putchar('\n');
+		printf("\n");
 	}
+	free(a);
+	
 	return 0;
 }
+
+
