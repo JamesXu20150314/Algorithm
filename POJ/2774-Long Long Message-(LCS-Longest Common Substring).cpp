@@ -5,6 +5,8 @@ Author: Zhimin Xu
 如果xi == yj，  则 c[i][j] = c[i-1][j-1]+1
 如果xi ! = yj,  那么c[i][j] = 0
 */
+
+/* // 系统超时，看来不能用动态规划求解，需要改进 
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
@@ -47,3 +49,4 @@ int main() {
 	
 	return 0;
 }
+*/
